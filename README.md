@@ -12,3 +12,7 @@ olist_order_items_dataset.csv
 URL to get the data 
 wget https://raw.githubusercontent.com/ohenry0227/data/main/olist_orders_dataset.csv
 Join the above 3 files.
+
+#cbstats localhost:11210 -u Administrator -p admin123 -b couch2music key country::AM
+ 
+#cbc-hash country::AM -U couchbase://localhost/couchmusci2 -u Administrator -P admin123
