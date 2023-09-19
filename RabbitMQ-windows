@@ -1,0 +1,116 @@
+Install RabbitMQ Server on windows
+Install Erlang
+Run the
+
+ Erlang Windows Binary File.( otp 25.3 ) 
+
+Erlang will appear in the Start Menu, and \erlx.x.x\bin\erl.exe will be in D:\MyExperiment\erl6.2 or C:\Program Files, depending on your platform and whether you chose a 32bit or 64bit version of Erlang.
+
+Set ERLANG_HOME
+Set ERLANG_HOME to where you actually put your Erlang installation, e.g. D:\MyExperiment\erl6.2. The RabbitMQ batch files expect to execute %ERLANG_HOME%\bin\erl.exe.
+Go to Start > Settings > Control Panel > System > Advanced > Environment Variables. Create the system environment variable ERLANG_HOME and set it to the full path of the directory which contains bin\erl.exe.
+
+Unzip rabbitmq-server-windows-3.12.4.zip from the software folder.
+From the zip file, extract the folder named
+ rabbitmq_server-zip into D:\MyExperiment\RabbitMQ .
+
+Finding Command Scripts and App Data
+Commands for RabbitMQ Server
+Within the rabbitmq_server-\sbin directory are some scripts which run commands to control the RabbitMQ server.
+The RabbitMQ server can be run as either an application or service (not both).
+•	rabbitmq-server.bat starts the broker as an application.
+•	rabbitmq-service.bat manages the service and starts the broker.
+•	rabbitmqctl.bat manages a running broker.
+Log in as an administrator. To see the output, run these from a Command Prompt in the sbin directory.
+Note: On Windows Vista (and later) you will need to elevate privilege (e.g. right-click on the icon to select Run as Administrator).
+Find Commands Easily
+Set up the system path so you can find the server and sbin directory easily.
+Create a system environment variable (e.g. RABBITMQ_SERVER) for" D:\MyExperiment\RabbitMQ\rabbitmq_server-". Adjust this if you put rabbitmq_server- elsewhere, or if you upgrade versions.
+
+
+Append the literal string ";%RABBITMQ_SERVER%\sbin" to your system path (aka %PATH%).
+
+Now you can run rabbitmq commands from any (administrator) Command Prompt.
+You will need to navigate to rabbitmq_server-\sbin to run commands if your system path does not contain the RabbitMQ sbin directory.
+
+Synchronise Erlang Cookies (when running a manually installed Windows Service)
+Erlang Security Cookies used by the service account and the user running rabbitmqctl.bat must be synchronised for rabbitmqctl.bat to function.
+
+To ensure Erlang cookie files contain the same string, copy the .erlang.cookie file from the Windows directory (normally C:\WINDOWS\.erlang.cookie) to replace the user .erlang.cookie. The user cookie will be in the user's home directory (%HOMEDRIVE%%HOMEPATH%), e.g.C:\Documents and Settings\%USERNAME%\.erlang.cookie orC:\Users\%USERNAME%\.erlang.cookie (Windows Vista and later).
+
+
+Finding Application Data
+By default, the RabbitMQ logs and Mnesia database are stored in the current user's Application Data directory e.g. C:\Documents and Settings\%USERNAME%\Application Data or C:\Users\%USERNAME%\AppData\Roaming (Windows Vista and later).
+Execute echo %APPDATA% at a Command Prompt to find this directory. Alternatively, Start > Run %APPDATA% will open this folder.
+
+Let us reconfigure the Node Data directory using the following steps (set Environment Variable).
+RABBITMQ_BASE = D:\Rabbitdata
+Go to the rabbitmq folder, usually “%appdata%\RabbitMQ”
+Create a file named “rabbitmq.conf”
+ 
+Running RabbitMQ Server as an Application
+The application is started by the rabbitmq-server.bat script in sbin.
+Customise RabbitMQ Server Environment Variables
+Environment variable defaults are set within the rabbitmq-server.bat file. You may need to customise environment variables for your installation.
+
+Start the Broker as an Application
+Run the command
+rabbitmq-server.bat 
+
+Alternatively, you can double-click the rabbitmq-server.bat file in Windows Explorer.
+If you start by double-clicking, a Command Prompt window opens, displays a short banner message, concluding with the message "completed with [n] plugins.", indicating that the RabbitMQ broker has been started successfully.
+If you started without the -detached option, e.g. by double-clicking, you will need a second Command Prompt window to control the application cleanly. Note: Closing the original Command Prompt window will forcefully shut down a server started this way.
+Stop or Manage the Broker
+rabbitmq-server only starts the broker. 
+To manage the broker use rabbitmqctl commands.
+
+Running RabbitMQ Server as a Service
+The service will run in the security context of the system account without the need for a user to be logged in on a console. This is normally more appropriate for production use. The server should not be run as a service and application simultaneously.
+The service runs using the rabbitmq-service.bat script in sbin.
+Stop the rabbitmq application before performing the next step.
+Close the terminal you have started the application.
+Customize RabbitMQ Service Environment Variables
+Note: After setting environment variables, you may need to install the service again.
+The rabbitmq-service.bat script recognises many of the same environment variables as rabbitmq-server.bat, as well as a few additional service environment variables.
+Install the Service
+Install the service by running
+rabbitmq-service install
+
+A service with the name defined by RABBITMQ_SERVICENAME should now appear in the Windows Services control panel (Start > Run services.msc).
+Managing the Service
+
+To manage the service (install, remove, start, stop, enable, disable), use rabbitmq-service.batcommands. You can also use the Windows Services panel (services.msc) to perform some of the same functions as the service script.
+Start the Broker as a Service
+To start the broker, execute
+rabbitmq-service.bat start
+
+If the output from this command is "Service RABBITMQ_SERVICENAME started", then the service was started correctly.
+Confirm the service named RABBITMQ_SERVICENAME reports a "Started" status in Services: 
+
+Start > Run services.msc.
+
+Default user access
+The broker creates a user guest with password guest. Unconfigured clients will in general use these credentials. By default, these credentials can only be used when connecting to the broker as localhost so you will need to take action before connecting from any other machine.
+
+Managing the Broker
+To stop the broker or check its status, use rabbitmqctl.bat in sbin (as an administrator).
+Stopping the Broker
+Use rabbitmqctl stop.
+
+Checking the Broker Status	
+Use rabbitmqctl status. 
+
+All rabbitmqctl commands will report the node absence if no broker is running (i.e. nodedown).
+Logging
+Output from the server is sent to a RABBITMQ_NODENAME.log file in the RABBITMQ_LOG_BASE directory. Additional log data is written to RABBITMQ_NODENAME-sasl.log.
+The broker always appends to the log files, so a complete log history is retained.
+You can rotate logs using
+ rabbitmqctl rotate_logs.
+Add web console:
+rabbitmq-plugins enable rabbitmq_management
+rabbitmqctl add_user henry henry123
+rabbitmqctl set_user_tags henry administrator
+
+Access the web console using the following URL
+http://localhost:15672/
+
