@@ -1,0 +1,15 @@
+docker network create --driver bridge spark-net 
+
+docker run -it --name spark0 --hostname spark0 --privileged -p 8080:8080 -p 7077:7077 -p 4040:4040 -p 8081:8081 -p 8090:8090   --network spark-net centos  /usr/sbin/init 
+
+docker network connect spark-net spark0 
+
+docker start  spark0 
+
+docker exec -it  spark0 /usr/bin/bash 
+
+
+docker run -dit  --name spark1 -p 8082:8081  -p 4041:4040 --network spark-net  --entrypoint /bin/bash centos:7
+
+
+docker network inspect spark-net 
