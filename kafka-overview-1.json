@@ -407,10 +407,10 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "kafka_server_brokertopicmetrics_bytesinperse",
+              "expr": "kafka_server_brokertopicmetrics_bytesinpersec",
               "intervalFactor": 2,
               "legendFormat": "{{topic}}",
-              "metric": "kafka_server_brokertopicmetrics_bytesinperse",
+              "metric": "kafka_server_brokertopicmetrics_bytesinpersec",
               "refId": "A",
               "step": 4
             }
