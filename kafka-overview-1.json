@@ -163,7 +163,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum without(area)(jvm_memory_bytes_used{job=\"kafka\"})",
+              "expr": "sum without(area)(jvm_memory_used_bytes{job=\"kafka\"})",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
               "metric": "jvm_memory_bytes_used",
@@ -407,10 +407,10 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum without(instance)(rate(kafka_server_brokertopicmetrics_bytesin_total{job=\"kafka\",topic!=\"\"}[5m]))",
+              "expr": "kafka_server_brokertopicmetrics_bytesinperse",
               "intervalFactor": 2,
               "legendFormat": "{{topic}}",
-              "metric": "kafka_server_brokertopicmetrics_bytesin_total",
+              "metric": "kafka_server_brokertopicmetrics_bytesinperse",
               "refId": "A",
               "step": 4
             }
@@ -485,10 +485,10 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum without(instance)(rate(kafka_server_brokertopicmetrics_bytesout_total{job=\"kafka\",topic!=\"\"}[5m]))",
+              "expr": "kafka_server_brokertopicmetrics_bytesoutpersec",
               "intervalFactor": 2,
               "legendFormat": "{{topic}}",
-              "metric": "kafka_server_brokertopicmetrics_bytesin_total",
+              "metric": "kafka_server_brokertopicmetrics_bytesoutpersec",
               "refId": "A",
               "step": 4
             }
